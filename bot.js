@@ -1,8 +1,11 @@
 require('dotenv').config();
-const { Telegraf } = require('telegraf');
+
+const { Telegraf, Markup } = require('telegraf');
+
 const zodiac = require('zodiac-signs')('en-US');
 const aztroJs = require('aztro-js');
 const translate = require('translate');
+
 const COMM = require('./comm');
 
 translate.engine = 'google';
@@ -14,7 +17,12 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.start((ctx) => ctx.reply(`Привет, ${ctx.message.from.first_name}!
 Если хочешь по дате узнать знак зодиака, то введи дату в формате "ДД ММ", например "09 10".
 А если хочешь узнать гороскоп твоего знака зодиака, то посмотри как он пишется в /help
-`));
+`, Markup.keyboard([
+  ['/cancer', '/aries', '/taurus', '/gemini'],
+  ['/leo', '/virgo', '/libra', '/scorpio'],
+  ['/sagittarius', '/capricorn', '/aquarius', '/pisces'],
+  ['/help'],
+]).resize()));
 bot.help((ctx) => ctx.reply(`Список комманд: ${COMM}`));
 
 bot.command(sign, (ctx) => {
